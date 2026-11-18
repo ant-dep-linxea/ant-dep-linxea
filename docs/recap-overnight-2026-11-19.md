@@ -8,14 +8,16 @@
 - **PR 1 opened as a draft.** frontend-instructions !27077 adds the `trace-regression` skill.
   - Independent review: 0 blockers; the 6 should-fix and 2 nits are fixed.
   - Full suite green: 2,818 tests.
-- **PR 2 opened as a draft, stacked on PR 1.** It wires the skill into `ticket-to-pr` (Bug close-out) and `pr-open` (fix PRs). Details below.
+- **PR 2 (!27078) opened as a draft, stacked on PR 1 (it targets PR 1's branch).** It wires the skill into `ticket-to-pr` (Bug close-out) and `pr-open` (fix PRs).
+  - Second independent review: 0 blockers; 4 should-fix and 2 nits applied. Three of them went into PR 1: a 75 s time budget, `--base`, and the Jira confirmation via `AskUserQuestion`.
 - **Nothing is merged and nothing is written to Jira.** Branch policies and settings are untouched.
 
 ## What you need to do
 
 1. **Spot-check 5 of my verdicts** in `docs/caused-by-pr-holdout-2.md`: MS-732, EN-3803, EN-3756, GROW-3182, EN-3257. I judged them while having built the tool. If 2 or more are wrong, the 86% does not hold.
 2. **Review PR 1 (!27077), then publish it** (it is a draft, so no reviewer has been notified). CI was still "queued" when I stopped. I cannot read builds from here (the builds API answers 401 through the proxy), so check that it ran.
-3. **Then PR 2**, retargeted to master once PR 1 is merged.
+3. **Then PR 2 (!27078).** Retarget it to `master` once PR 1 is merged.
+4. **Delete the branch `adepertat/trace-regression-wiring`.** It is an earlier, unreviewed copy of PR 2, left in place because I am not allowed to force-push or delete.
 
 ## PR 1: frontend-instructions !27077 (draft), branch `adepertat/trace-regression`
 
@@ -39,10 +41,13 @@
 
 **Found while testing the port:** when the fix went through a feature branch, the top suspect can be a PR that landed *after* the fix (EN-3714). That bug probably never reached master. Such PRs are now labelled "landed with or after the fix" and never suggested.
 
-## PR 2 (stacked): wiring
+## PR 2 (stacked): frontend-instructions !27078, branch `adepertat/trace-regression-wiring-v2`
 
-- `ticket-to-pr` (shared and mobile override), Step 11: for a Bug ticket, run `/trace-regression --bug <KEY>`. The user picks the answer; a failed trace never blocks the close-out.
-- `pr-open` Step 5: on a `fix` PR, add a `Suspects (non confirmés)` line, so reviewers see the candidates.
+- `ticket-to-pr` (shared and mobile override), Step 11: for a Bug ticket, run `/trace-regression --bug <KEY>` in the session, never in the haiku agent.
+  - The user picks the origin; a failed trace never blocks the close-out.
+  - The Step 12 report gives the origin.
+- `pr-open` Step 5: on a `fix` PR, add a `Suspects (non confirmés)` line traced against the target branch. A non-zero exit or a timeout is skipped silently.
+- **Cost:** one trace (usually 2–16 s, capped at 75 s) per `fix` PR and per Bug close-out.
 
 ## Not done, and why
 
@@ -57,4 +62,4 @@
   - `docs/caused-by-pr-plan.md`: the plan.
   - `docs/caused-by-pr-backtest.md`, `docs/caused-by-pr-holdout.md`, `docs/caused-by-pr-holdout-2.md`: the tests.
   - `scripts/`: the prototypes.
-- **frontend-instructions:** branches `adepertat/trace-regression` (PR 1) and `adepertat/trace-regression-wiring` (PR 2).
+- **frontend-instructions:** branches `adepertat/trace-regression` (PR 1, !27077) and `adepertat/trace-regression-wiring-v2` (PR 2, !27078).
