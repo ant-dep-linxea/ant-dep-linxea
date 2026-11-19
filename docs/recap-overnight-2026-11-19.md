@@ -53,7 +53,8 @@
 
 - **Sync dry-run:** the container has no `az`. `sync/` is unchanged.
 - **PR 3 (the escaped-defects metric skill):** not started. It needs PR 1 merged and a few weeks of confirmed origins. Main design point from the data: 10 of 14 regressions came from PRs older than 180 days, so the metric must group culprits by merge month, and the bypass vs review signal will take months to accumulate.
-- **Found, outside scope:** `create-ticket/references/qa-tickets.md` puts the cause as the *outward* issue, which reverses the `is caused by` link (per the MCP tool's own description). It needs a small separate fix.
+- **Link direction (fixed on 19/11 in frontend-instructions !27091, draft):** `qa-tickets.md` and `wayfinder/references/jira-publish.md` asked for reversed links.
+  - EN-3893, EN-3894, EN-3895 and EN-3899 carry the reversed `Problem/Incident` link; they are not corrected in Jira yet.
 
 ## Where things are
 
